@@ -1,5 +1,5 @@
 import Response from "../helpers/Response";
-import { users, nida } from "../db/models";
+import { users, nida, products, loans } from "../db/models";
 import HttpStatus from "http-status";
 
 export const doesAccountExist = async (req, res, next) => {
@@ -33,6 +33,42 @@ export const nidExist = async (req, res, next) => {
       res,
       "National ID not found",
       HttpStatus.NOT_FOUND
+    );
+  }
+
+  next();
+};
+
+export const productExist = async (req, res, next) => {
+  const { product_id } = req.body;
+  const info = await products.findOne({ where: { id:product_id } });
+  if (!info) {
+    return Response.errorMessage(
+      res,
+      "Product not found",
+      HttpStatus.NOT_FOUND
+    );
+  }
+
+  next();
+};
+
+export const unpaidLoanExist = async (req, res, next) => {
+  const { nid } = req.body;
+  const {status, isPaid} = await loans.findOne({ where: { nid }});
+  if (status==="pending") {
+    return Response.errorMessage(
+      res,
+      "You already have a pending loan application request.",
+      HttpStatus.CONFLICT
+    );
+  }
+
+  if (!isPaid) {
+    return Response.errorMessage(
+      res,
+      "You have unpaid pending loan. Please, settle it and come back.",
+      HttpStatus.BAD_REQUEST
     );
   }
 

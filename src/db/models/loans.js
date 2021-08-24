@@ -12,10 +12,12 @@ module.exports = (sequelize, DataTypes) => {
       org_type: DataTypes.STRING,
       status: DataTypes.STRING,
       product_id: DataTypes.STRING,
+      tin: DataTypes.STRING,
       total_amount_to_pay: DataTypes.DOUBLE,
       isPaid: DataTypes.BOOLEAN,
       amount_borrowed: DataTypes.DOUBLE,
       amount_paid: DataTypes.DOUBLE,
+      reason: DataTypes.STRING,
     },
     {}
   );

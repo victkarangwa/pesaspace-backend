@@ -37,6 +37,36 @@ class Validator {
     ];
   }
 
+    /**
+   * Validate nid
+   * @static
+   * @returns {object} errors
+   */
+     static loanAppRules() {
+      return [
+        check(
+          "nid",
+          "National ID should be valid (contain 16 digits)"
+        ).isString(),
+        check("first_name", "First name should be valid").isString(),
+        check("last_name", "Last name should be valid").isString(),
+        check("address", "address should be valid").isString(),
+        check("email", "email should be valid").isEmail(),
+        check("phone", "phone should be valid").isString(),
+        check(
+          "org_type",
+          "organization should be valid (individual or company)"
+        ).isIn(["individual", "company"]),
+        check("product_id", "address should be valid").isString(),
+        check(
+          "tin",
+          "TIN should be valid (9 digits starting with 0 or 9)"
+        ).optional(),
+        check("amount_borrowed", "amount borrowed should be valid").isFloat(),
+        check("reason", "Reason  should be valid").isString(),
+      ];
+    }
+
   /**
    * Validate input
    * @static

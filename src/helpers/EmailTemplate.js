@@ -14,8 +14,8 @@ const transporter = nodemailer.createTransport({
 });
 
 class EmailHelper {
-  static async newApplicationEmail(req) {
-    const info = await transporter.sendMail(Email.newApplication(req));
+  static async newApplicationEmail(req,admins) {
+    const info = await transporter.sendMail(Email.newApplication(req,admins));
   }
 
   static async newInviteEmail(req, userPassword) {

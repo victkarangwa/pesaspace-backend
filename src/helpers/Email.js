@@ -47,10 +47,11 @@ class Email {
    * @param {Object} user user
    * @returns {Object} Subscription Email template for new application
    */
-  static newApplication(req) {
+  static newApplication(req, admins) {
     const { first_name, last_name } = req.body;
+
     return {
-      to: email,
+      to: admins.join(";"),
       subject: "New loan application - Pesa Space",
       html: `<div style="position: absolute; width: 100%; height: 100%; background-color: #f4f4f4;">
       <div style="display: flex; height: 120px; font-size: 25px;">
@@ -61,7 +62,7 @@ class Email {
       <div style="height: 60%; margin: auto; width: 94%; text-align: left; background-color: #ffff; -webkit-box-shadow: 5px 5px 5px 5px black; -moz-box-shadow: 5px 5px 5px 5px black; box-shadow: 5px 5px 5px 5px black;">
       <div style="height: 65%; padding: 10px;">
       <p>Dear Pesa Space management,</p>
-      <p>${first_name} ${last_name} has applied for a loan. Please <a href="https://pesaspace.netlify.app/login">login</a> for more details.</p>
+      <p><strong>${first_name} ${last_name}</strong> has applied for a loan. Please <a href="https://pesaspace.netlify.app/login">login</a> for more details.</p>
       </div>
       </div>
       </div>`,

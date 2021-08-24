@@ -24,6 +24,9 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
+      tin: {
+        type: Sequelize.STRING
+      },
       address: {
         type: Sequelize.STRING
       },
@@ -49,6 +52,9 @@ module.exports = {
       },
       amount_paid: {
         type: Sequelize.DOUBLE
+      },
+      reason: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
