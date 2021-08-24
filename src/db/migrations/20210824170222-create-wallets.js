@@ -8,7 +8,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       user_id: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        references: {
+          model: "users",
+          key: "id",
+        },
       },
       balance: {
         type: Sequelize.DOUBLE

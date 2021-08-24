@@ -4,7 +4,7 @@
   "description": "This is a system where a shareholder will deposit an e-Money , and  the system lend them and re-pay with some interest.",
   "main": "index.js",
   "scripts": {
-    "start": "node --require @babel/polyfill build/index.js",
+    "start": "babel-node src/index.js",
     "start:dev": "NODE_ENV=development nodemon --exec babel-node ./src/index.js",
     "revertSeed": "sequelize db:seed:undo:all",
     "db:seed": "sequelize db:seed:undo:all && sequelize db:seed:all",

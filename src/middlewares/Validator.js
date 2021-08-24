@@ -37,6 +37,12 @@ class Validator {
     ];
   }
 
+  static amountRules() {
+    return [
+      check("amount", "Amount to deposit should be valid").isFloat(),
+    ];
+  }
+
   /**
    * Validate nid
    * @static

@@ -7,7 +7,7 @@ const router = Router();
 
 router.use('/auth', authRoute);
 router.use('/loan', loanRoute);
-// router.use('/wallet', walletRoute);
+router.use('/wallet', walletRoute);
 
 
 export default router;

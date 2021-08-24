@@ -24,4 +24,17 @@ authRouter.post(
   AuthController.login
 );
 
+
+authRouter.get(
+  "/users",
+  verifyToken,
+  AuthController.viewAllUsers
+);
+
+authRouter.get(
+  "/profile",
+  verifyToken,
+  AuthController.viewProfile
+);
+
 export default authRouter;

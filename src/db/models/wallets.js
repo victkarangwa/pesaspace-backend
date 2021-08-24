@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   wallets.associate = function(models) {
     // associations can be defined here
+    // wallets.belongsTo(models.menus, {
+    //   as: "belongsTo",
+    //   foreignKey: "user_id",
+    // });
   };
   return wallets;
 };

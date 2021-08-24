@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { users } from "../db/models";
+import { users, wallets } from "../db/models";
 import QueryService from "./QueryService";
 import HashPassword from "../helpers/HashPassword";
 
@@ -11,11 +11,13 @@ class AuthService {
    * @memberof AuthService
    * @returns {object} data
    */
-  static async register(req,userPassword) {
+  static async register(req, userPassword) {
     const { first_name, last_name, email, role } = req.body;
     const hashedPassword = HashPassword.hashPassword(userPassword);
+
+    const user_id = uuid();
     const newUserObject = {
-      id: uuid(),
+      id: user_id,
       first_name,
       last_name,
       email,
@@ -25,7 +27,44 @@ class AuthService {
       isActive: false,
     };
     const newUser = await QueryService.create(users, newUserObject);
+    await QueryService.create(wallets, {
+      id: uuid(),
+      user_id: user_id,
+      balance: 0,
+      currency: "RWF",
+    });
     return newUser;
+  }
+
+  static async viewAllUsers(req) {
+    const allUsers = await QueryService.findAll(users, {
+      attributes: [
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "role",
+        "isVerified",
+        "isActive",
+      ],
+    });
+    return allUsers;
+  }
+
+  static async viewProfile(req) {
+    const userProfile = await QueryService.findOne(users, {
+      where: { id: req.user.id },
+      attributes: [
+        "id",
+        "first_name",
+        "last_name",
+        "email",
+        "role",
+        "isVerified",
+        "isActive",
+      ],
+    });
+    return userProfile;
   }
 }
 export default AuthService;

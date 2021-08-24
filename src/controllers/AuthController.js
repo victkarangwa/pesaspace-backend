@@ -1,4 +1,4 @@
-const passwordGenerator = require('generate-password');
+const passwordGenerator = require("generate-password");
 import TokenAuthenticator from "../helpers/TokenAuthenticator";
 import Response from "../helpers/Response";
 import httpStatus from "http-status";
@@ -15,7 +15,7 @@ class AuthController {
       lowercase: true,
       numbers: true,
       symbols: true,
-  });
+    });
     const newUser = await AuthService.register(req, userPassword);
     const { password, ...data } = newUser.dataValues;
     const token = TokenAuthenticator.tokenGenerator(data);
@@ -39,7 +39,7 @@ class AuthController {
 
     await QueryService.update(users, [
       { isActive: true },
-      { where: { id: data.id, } },
+      { where: { id: data.id } },
     ]);
 
     res.cookie("token", token, { httpOnly: true });
@@ -48,6 +48,28 @@ class AuthController {
       res,
       "Logged in successfully",
       "",
+      httpStatus.OK
+    );
+  }
+
+  static async viewAllUsers(req, res) {
+    const allUsers = await AuthService.viewAllUsers(req);
+
+    return Response.successMessage(
+      res,
+      "All platform users retrieved successfully",
+      allUsers,
+      httpStatus.OK
+    );
+  }
+
+  static async viewProfile(req, res) {
+    const profile = await AuthService.viewProfile(req);
+
+    return Response.successMessage(
+      res,
+      "Profile retrieved successfully",
+      profile,
       httpStatus.OK
     );
   }
