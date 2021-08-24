@@ -1,0 +1,57 @@
+{
+  "name": "pesaspace-backend",
+  "version": "1.0.0",
+  "description": "This is a system where a shareholder will deposit an e-Money , and  the system lend them and re-pay with some interest.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --require @babel/polyfill build/index.js",
+    "start:dev": "NODE_ENV=development nodemon --exec babel-node ./src/index.js",
+    "revertSeed": "sequelize db:seed:undo:all",
+    "db:seed": "sequelize db:seed:undo:all && sequelize db:seed:all",
+    "clean": "rm -rf build && mkdir build",
+    "db:migrate": "sequelize db:migrate",
+    "db:migrate:undo": "sequelize db:migrate:undo:all"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.12.10",
+    "@types/node": "^14.14.22",
+    "algoliasearch": "^4.10.3",
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.9.0",
+    "generate-password": "^1.6.0",
+    "helmet": "^4.4.1",
+    "http-status": "^1.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.4.17",
+    "pg": "^8.5.1",
+    "raw-body": "^2.4.1",
+    "sequelize": "^5.22.3",
+    "sequelize-cli": "^5.5.1",
+    "uuid": "^8.3.2",
+    "validator": "^13.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victkarangwa/pesaspace-backend.git"
+  },
+  "author": "Victor Karangwa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/victkarangwa/pesaspace-backend/issues"
+  },
+  "homepage": "https://github.com/victkarangwa/pesaspace-backend#readme"
+}
