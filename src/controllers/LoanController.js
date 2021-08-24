@@ -37,5 +37,17 @@ class LoanController {
       httpStatus.ACCEPTED
     );
   }
+
+  static async getAllLoanApplications(req, res) {
+    const allLoanApps = await LoanService.getAllLoanApplications(req);
+
+    Response.successMessage(
+      res,
+      "All loan applications retrieved successfully!",
+      allLoanApps,
+      httpStatus.OK
+    );
+  }
+
 }
 export default LoanController;

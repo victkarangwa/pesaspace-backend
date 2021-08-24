@@ -55,7 +55,7 @@ export const productExist = async (req, res, next) => {
 
 export const unpaidLoanExist = async (req, res, next) => {
   const { nid } = req.body;
-  const {status, isPaid} = await loans.findOne({ where: { nid }});
+  const {status, isPaid} = await loans.findOne({ where: { nid }}) || {  };
   if (status==="pending") {
     return Response.errorMessage(
       res,
@@ -64,7 +64,7 @@ export const unpaidLoanExist = async (req, res, next) => {
     );
   }
 
-  if (!isPaid) {
+  if (isPaid === false) {
     return Response.errorMessage(
       res,
       "You have unpaid pending loan. Please, settle it and come back.",

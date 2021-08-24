@@ -23,5 +23,10 @@ loanRouter.post(
   LoanController.applyForLoan
 );
 
+loanRouter.get(
+  "/all",
+  verifyToken,
+  LoanController.getAllLoanApplications
+);
 
 export default loanRouter;
