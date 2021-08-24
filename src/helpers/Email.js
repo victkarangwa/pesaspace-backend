@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { loans } from "../db/models";
 
 dotenv.config();
 const { EMAIL_ADDRESS, WEB_BASE_URL, BASE_URL_PATH } = process.env;
@@ -77,7 +78,11 @@ class Email {
    * @returns {Object} Subscription Email template for reject application
    */
   static rejectedApplication(req) {
-    const { first_name, last_name } = req.body;
+    const {
+      body: { reason, email },
+      params: { loan_id },
+    } = req;
+
     return {
       to: email,
       subject: "Your application status - Pesa Space",
@@ -90,7 +95,7 @@ class Email {
         <div style="height: 60%; margin: auto; width: 94%; text-align: left; background-color: #ffff; -webkit-box-shadow: 5px 5px 5px 5px black; -moz-box-shadow: 5px 5px 5px 5px black; box-shadow: 5px 5px 5px 5px black;">
         <div style="height: 65%; padding: 10px;">
         <p>Hi there,</p>
-        <p>We regret to inform you that your loan application at Pesa Space has been rejected due to the following reason:</p>
+        <p>We regret to inform you that your loan application (ID: ${loan_id}) at Pesa Space has been rejected due to the following reason:</p>
         <p>- ${reason}</p>
         </div>
         </div>
@@ -105,8 +110,12 @@ class Email {
    * @param {Object} user user
    * @returns {Object} Subscription Email template for reject application
    */
-  static acceptedApplication(req) {
-    const { first_name, last_name } = req.body;
+  static  acceptedApplication(req) {
+    const {
+      params: { loan_id },
+      body: { email },
+    } = req;
+
     return {
       to: email,
       subject: "Congraturations - Pesa Space",
@@ -119,7 +128,7 @@ class Email {
             <div style="height: 60%; margin: auto; width: 94%; text-align: left; background-color: #ffff; -webkit-box-shadow: 5px 5px 5px 5px black; -moz-box-shadow: 5px 5px 5px 5px black; box-shadow: 5px 5px 5px 5px black;">
             <div style="height: 65%; padding: 10px;">
             <p>Hi there,</p>
-            <p>We are pleased to inform you that your loan application at Pesa Space has been accepted. Please contact us at <a href="mailto:loans@pesaspace.com">loans@pesaspace.com</a> for more info</p>
+            <p>We are pleased to inform you that your loan application (ID: ${loan_id}) at Pesa Space has been accepted. Please contact us at <a href="mailto:loans@pesaspace.com">loans@pesaspace.com</a> for more info</p>
             </div>
             </div>
             </div>`,

@@ -103,5 +103,12 @@ class LoanService {
     );
     return formattedInfo;
   }
+
+  static async acceptOrRejectLoanApplication(req) {
+    const { action, loan_id } = req.params;
+    const updateObj = [{ status: `${action}ed` }, { where: { id: loan_id } }];
+    const updatedInfo = await QueryService.update(loans, updateObj);
+    return updatedInfo;
+  }
 }
 export default LoanService;

@@ -49,5 +49,18 @@ class LoanController {
     );
   }
 
+  static async acceptOrRejectLoanApplication(req, res) {
+    const { action } = req.params;
+    const loanResponse = await LoanService.acceptOrRejectLoanApplication(req);
+    action === "accept"
+      ? EmailTemplate.acceptEmail(req)
+      : EmailTemplate.rejectEmail(req);
+    Response.successMessage(
+      res,
+      `Loan application has been successfully ${action}ed`,
+      loanResponse,
+      httpStatus.OK
+    );
+  }
 }
 export default LoanController;

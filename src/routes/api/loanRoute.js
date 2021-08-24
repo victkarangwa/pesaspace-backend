@@ -29,4 +29,12 @@ loanRouter.get(
   LoanController.getAllLoanApplications
 );
 
+loanRouter.patch(
+  "/:loan_id/:action",
+  verifyToken,
+  Validator.acceptOrRejectRules(),
+  Validator.validateInput,
+  LoanController.acceptOrRejectLoanApplication
+);
+
 export default loanRouter;
