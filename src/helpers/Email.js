@@ -15,8 +15,9 @@ class Email {
    * @param {Object} user user
    * @returns {Object} Subscription Email template for new user
    */
-  static newUserInvite(req) {
+  static newUserInvite(req, userPassword) {
     const { email } = req.body;
+
     return {
       to: email,
       subject: "Invitation - Pesa Space",
@@ -29,7 +30,10 @@ class Email {
       <div style="height: 60%; margin: auto; width: 94%; text-align: left; background-color: #ffff; -webkit-box-shadow: 5px 5px 5px 5px black; -moz-box-shadow: 5px 5px 5px 5px black; box-shadow: 5px 5px 5px 5px black;">
       <div style="height: 65%; padding: 10px;">
       <p>Hi there</p>
-      <p>You have been invited to <a href="https://pesaspace.netlify.app">Pesa Space Platform</a>. Please <a href="https://pesaspace.netlify.app/login">login</a> for more details.</p>
+      <p>You have been invited to <a href="https://pesaspace.netlify.app">Pesa Space Platform</a>. Please, use the following credentials to <a href="https://pesaspace.netlify.app/login">login</a> to the platform:</p>
+      <p><strong>Email</strong>: ${email}</p>
+      <p><strong>Password</strong>: ${userPassword}</p>
+    
       </div>
       </div>
       </div>`,

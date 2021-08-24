@@ -1,5 +1,5 @@
 import Response from "../helpers/Response";
-import { users } from "../db/models";
+import { users, nida } from "../db/models";
 import HttpStatus from "http-status";
 
 export const doesAccountExist = async (req, res, next) => {
@@ -18,6 +18,20 @@ export const userExists = async (req, res, next) => {
     return Response.errorMessage(
       res,
       "User with the provided ID does not exist",
+      HttpStatus.NOT_FOUND
+    );
+  }
+
+  next();
+};
+
+export const nidExist = async (req, res, next) => {
+  const { nid } = req.params;
+  const info = await nida.findOne({ where: { nid } });
+  if (!info) {
+    return Response.errorMessage(
+      res,
+      "National ID not found",
       HttpStatus.NOT_FOUND
     );
   }

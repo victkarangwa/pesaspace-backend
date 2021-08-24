@@ -11,16 +11,16 @@ class AuthService {
    * @memberof AuthService
    * @returns {object} data
    */
-  static async register(req) {
-    const { first_name, last_name, email, password } = req.body;
-    const hashedPassword = HashPassword.hashPassword(password);
+  static async register(req,userPassword) {
+    const { first_name, last_name, email, role } = req.body;
+    const hashedPassword = HashPassword.hashPassword(userPassword);
     const newUserObject = {
       id: uuid(),
       first_name,
       last_name,
       email,
       password: hashedPassword,
-      role: "user",
+      role,
       isVerified: true,
       isActive: false,
     };

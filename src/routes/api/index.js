@@ -6,7 +6,7 @@ import walletRoute from './walletRoute';
 const router = Router();
 
 router.use('/auth', authRoute);
-// router.use('/loan', loanRoute);
+router.use('/loan', loanRoute);
 // router.use('/wallet', walletRoute);
 
 

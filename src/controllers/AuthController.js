@@ -1,4 +1,4 @@
-import { v4 as uuid } from "uuid";
+const passwordGenerator = require('generate-password');
 import TokenAuthenticator from "../helpers/TokenAuthenticator";
 import Response from "../helpers/Response";
 import httpStatus from "http-status";
@@ -9,12 +9,19 @@ import EmailTemplate from "../helpers/EmailTemplate";
 
 class AuthController {
   static async register(req, res) {
-    const newUser = await AuthService.register(req);
+    const userPassword = passwordGenerator.generate({
+      length: 10,
+      uppercase: true,
+      lowercase: true,
+      numbers: true,
+      symbols: true,
+  });
+    const newUser = await AuthService.register(req, userPassword);
     const { password, ...data } = newUser.dataValues;
     const token = TokenAuthenticator.tokenGenerator(data);
     data.token = token;
 
-    EmailTemplate.newInviteEmail(req);
+    EmailTemplate.newInviteEmail(req, userPassword);
 
     Response.successMessage(
       res,

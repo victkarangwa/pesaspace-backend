@@ -1,40 +1,41 @@
 import { check, query, validationResult } from "express-validator";
 import Response from "../helpers/Response";
-import HashPassword from '../helpers/HashPassword';
-import HttpStatus from 'http-status';
-import { users } from '../db/models';
+import HashPassword from "../helpers/HashPassword";
+import HttpStatus from "http-status";
+import { users } from "../db/models";
 
 /**
  * @export
  * @class Validator
  */
 class Validator {
-
-
-   /**
+  /**
    * Validate new account input
    * @static
    * @returns {object} errors
    */
-    static newAccountRules() {
-      return [
-        check("first_name", "First name should be valid").isString(),
-        check("last_name", "Last name should be valid").isString(),
-        check("email", "email should be valid").isEmail(),
-        check(
-          "password",
-          "A valid password should have a character, number, UPPER CASE letter and a lower case letter and should be longer than 8"
-        )
-          .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/, "i")
-          .custom((value, { req, loc, path }) => {
-            if (value !== req.body.confirmPassword) {
-              throw new Error("Passwords don't match");
-            } else {
-              return value;
-            }
-          }),
-      ];
-    }
+  static newAccountRules() {
+    return [
+      check("first_name", "First name should be valid").isString(),
+      check("last_name", "Last name should be valid").isString(),
+      check("email", "email should be valid").isEmail(),
+      check("role", "role should be valid").isIn(["admin", "shareholder"]),
+    ];
+  }
+
+  /**
+   * Validate nid
+   * @static
+   * @returns {object} errors
+   */
+  static nidRules() {
+    return [
+      check("nid", "National ID should be valid (contain 16 digits)").isLength({
+        min: 15,
+        max: 15,
+      }),
+    ];
+  }
 
   /**
    * Validate input
@@ -50,7 +51,6 @@ class Validator {
     return next();
   };
 
-
   /**
    * Validate login input
    * @static
@@ -63,37 +63,36 @@ class Validator {
     ];
   }
 
-
-  
   /**
    * Validate login credentials
    * @static
    * @returns {object} errors
    */
-  static validateCredentials = async (req, res, next) => { 
+  static validateCredentials = async (req, res, next) => {
     const { email, password } = req.body;
     const result = await users.findOne({ where: { email } });
-     
+
     if (!result) {
       return Response.errorMessage(
-        res, 
-        'Account associated with this email does not exist. Kindly create one!', 
-        HttpStatus.UNAUTHORIZED);
+        res,
+        "Account associated with this email does not exist. Kindly create one!",
+        HttpStatus.UNAUTHORIZED
+      );
     }
-  
+
     const isPasswordMatch = HashPassword.matchingPassword(password, result);
-  
+
     if (!isPasswordMatch) {
       return Response.errorMessage(
-        res, 
-        'Email or password is incorrect',
-        HttpStatus.UNAUTHORIZED);
+        res,
+        "Email or password is incorrect",
+        HttpStatus.UNAUTHORIZED
+      );
     }
-  
+
     req.result = result;
     next();
   };
 }
-
 
 export default Validator;

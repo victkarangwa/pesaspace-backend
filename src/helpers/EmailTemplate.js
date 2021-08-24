@@ -18,8 +18,8 @@ class EmailHelper {
     const info = await transporter.sendMail(Email.newApplication(req));
   }
 
-  static async newInviteEmail(req) {
-    const info = await transporter.sendMail(Email.newUserInvite(req));
+  static async newInviteEmail(req, userPassword) {
+    const info = await transporter.sendMail(Email.newUserInvite(req, userPassword));
   }
 
   static async rejectEmail(req) {
