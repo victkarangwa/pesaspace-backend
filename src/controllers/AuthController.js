@@ -47,7 +47,7 @@ class AuthController {
     return Response.successMessage(
       res,
       "Logged in successfully",
-      "",
+      {token},
       httpStatus.OK
     );
   }

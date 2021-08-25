@@ -37,6 +37,12 @@ class Validator {
     ];
   }
 
+  static idRules() {
+    return [
+      check("id", "ID should be valid").isUUID()
+    ];
+  }
+
   static tinRules() {
     return [
       check("tin", "TIN number should be valid (contain 9 digits)").isLength({

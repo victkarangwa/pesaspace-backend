@@ -4,6 +4,46 @@ import QueryService from "./QueryService";
 import HashPassword from "../helpers/HashPassword";
 
 class LoanService {
+  static async findLoanRequest(req) {
+    const { id } = req.params;
+    const nidaObj = {
+      where: { id },
+      include: [
+        {
+          as: "product",
+          model: products,
+          attributes: ["interest", "period"],
+        },
+      ],
+      attributes: [
+        "first_name",
+        "last_name",
+        "nid",
+        "status",
+        "total_amount_to_pay",
+        "updatedAt",
+        "createdAt"
+      ],
+    };
+
+    const loanInfo = await QueryService.findOne(loans, nidaObj);
+    let months;
+    months =
+      (new Date().getFullYear() - new Date(loanInfo.updatedAt).getFullYear()) *
+      12;
+    months -= new Date().getMonth();
+    months += new Date(loanInfo.updatedAt).getMonth();
+
+    const timeEllapsed = months < 0 ? -months : months;
+
+
+    const loanPeriod = Number(loanInfo.product.period.split("m")[0]);
+
+    const penalities = timeEllapsed > loanPeriod ? timeEllapsed * 10000 : 0;
+
+    return { loanInfo, penalities };
+  }
+
   static async findIdInfo(req) {
     const { nid } = req.params;
     const nidaObj = {
@@ -14,7 +54,7 @@ class LoanService {
     return nidaInfo;
   }
 
-    static async findTinInfo(req) {
+  static async findTinInfo(req) {
     const { tin } = req.params;
     const rraObj = {
       where: { tin },
@@ -54,8 +94,8 @@ class LoanService {
       total_amount: productInfo.total_amount,
       isPaid: false,
       total_amount_to_pay: (
-        (productInfo.interest * amount_borrowed) / 100 +
-        amount_borrowed
+        (productInfo.interest * Number(amount_borrowed)) / 100 +
+        Number(amount_borrowed)
       ).toFixed(2),
       amount_paid: 0,
       status: "pending",
@@ -72,6 +112,7 @@ class LoanService {
       // attributes: ["first_name", "last_name", "dob", "nid", "sex"],
     };
     const appsInfo = await QueryService.findAll(loans, appsaObj);
+    if(appsInfo.length){
     const formattedInfo = await Promise.all(
       appsInfo.map(
         async ({
@@ -87,6 +128,7 @@ class LoanService {
           amount_paid,
           tin,
           nid,
+          createdAt,
         }) => {
           const data = {
             id,
@@ -99,6 +141,7 @@ class LoanService {
             total_amount_to_pay,
             isPaid,
             amount_paid,
+            createdAt
           };
 
           const rraData = await rra.findOne({ where: { tin } });
@@ -110,8 +153,10 @@ class LoanService {
           return data;
         }
       )
-    );
-    return formattedInfo;
+      );
+      return formattedInfo;
+    }
+    return [];
   }
 
   static async acceptOrRejectLoanApplication(req) {

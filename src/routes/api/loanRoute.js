@@ -1,7 +1,7 @@
 import express from "express";
 import Validator from "../../middlewares/Validator";
 import LoanController from "../../controllers/LoanController";
-import { nidExist, productExist, unpaidLoanExist, tinExist } from "../../middlewares/scopeChecker";
+import { nidExist, productExist, unpaidLoanExist, tinExist, loanRequestExist } from "../../middlewares/scopeChecker";
 import verifyToken from "../../middlewares/verifyToken";
 
 const loanRouter = express.Router();
@@ -43,6 +43,15 @@ loanRouter.patch(
   Validator.acceptOrRejectRules(),
   Validator.validateInput,
   LoanController.acceptOrRejectLoanApplication
+);
+
+
+loanRouter.get(
+  "/find/:id",
+  Validator.idRules(),
+  Validator.validateInput,
+  loanRequestExist,
+  LoanController.findLoanRequest
 );
 
 export default loanRouter;

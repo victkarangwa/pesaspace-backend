@@ -8,6 +8,18 @@ import QueryService from "../services/QueryService";
 import EmailTemplate from "../helpers/EmailTemplate";
 
 class LoanController {
+
+  static async findLoanRequest(req, res) {
+    const nidaInfo = await LoanService.findLoanRequest(req);
+
+    Response.successMessage(
+      res,
+      "Loan data!",
+      nidaInfo,
+      httpStatus.OK
+    );
+  }
+
   static async findNidaInfo(req, res) {
     const nidaInfo = await LoanService.findIdInfo(req);
 

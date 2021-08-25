@@ -39,6 +39,20 @@ export const nidExist = async (req, res, next) => {
   next();
 };
 
+export const loanRequestExist = async (req, res, next) => {
+  const { id } = req.params;
+  const info = await loans.findOne({ where: { id } });
+  if (!info) {
+    return Response.errorMessage(
+      res,
+      "Request ID not found",
+      HttpStatus.NOT_FOUND
+    );
+  }
+
+  next();
+};
+
 export const tinExist = async (req, res, next) => {
   const { tin } = req.params;
   const info = await rra.findOne({ where: { tin } });
