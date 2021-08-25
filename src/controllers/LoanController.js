@@ -19,6 +19,17 @@ class LoanController {
     );
   }
 
+  static async findrraInfo(req, res) {
+    const rraInfo = await LoanService.findTinInfo(req);
+
+    Response.successMessage(
+      res,
+      "User data retrieved from RRA successfully!",
+      rraInfo,
+      httpStatus.OK
+    );
+  }
+
   static async applyForLoan(req, res) {
     const appInfo = await LoanService.applyForLoan(req);
 

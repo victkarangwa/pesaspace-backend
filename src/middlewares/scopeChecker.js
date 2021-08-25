@@ -1,5 +1,5 @@
 import Response from "../helpers/Response";
-import { users, nida, products, loans } from "../db/models";
+import { users, nida, products, loans, rra } from "../db/models";
 import HttpStatus from "http-status";
 
 export const doesAccountExist = async (req, res, next) => {
@@ -32,6 +32,20 @@ export const nidExist = async (req, res, next) => {
     return Response.errorMessage(
       res,
       "National ID not found",
+      HttpStatus.NOT_FOUND
+    );
+  }
+
+  next();
+};
+
+export const tinExist = async (req, res, next) => {
+  const { tin } = req.params;
+  const info = await rra.findOne({ where: { tin } });
+  if (!info) {
+    return Response.errorMessage(
+      res,
+      "TIN number not found",
       HttpStatus.NOT_FOUND
     );
   }

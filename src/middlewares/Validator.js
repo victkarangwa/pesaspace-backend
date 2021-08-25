@@ -30,9 +30,18 @@ class Validator {
    */
   static nidRules() {
     return [
-      check("nid", "National ID should be valid (contain 16 digits)").isLength({
+      check("nid", "National ID should be valid (contain 15 digits)").isLength({
         min: 15,
         max: 15,
+      }),
+    ];
+  }
+
+  static tinRules() {
+    return [
+      check("tin", "TIN number should be valid (contain 9 digits)").isLength({
+        min: 9,
+        max: 9,
       }),
     ];
   }

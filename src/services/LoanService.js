@@ -14,6 +14,16 @@ class LoanService {
     return nidaInfo;
   }
 
+    static async findTinInfo(req) {
+    const { tin } = req.params;
+    const rraObj = {
+      where: { tin },
+      attributes: ["nid", "company_name", "tin", "address", "isTaxCleared"],
+    };
+    const rraInfo = await QueryService.findOne(rra, rraObj);
+    return rraInfo;
+  }
+
   static async applyForLoan(req) {
     const {
       nid,

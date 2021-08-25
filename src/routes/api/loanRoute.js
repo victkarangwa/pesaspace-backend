@@ -1,7 +1,7 @@
 import express from "express";
 import Validator from "../../middlewares/Validator";
 import LoanController from "../../controllers/LoanController";
-import { nidExist, productExist, unpaidLoanExist } from "../../middlewares/scopeChecker";
+import { nidExist, productExist, unpaidLoanExist, tinExist } from "../../middlewares/scopeChecker";
 import verifyToken from "../../middlewares/verifyToken";
 
 const loanRouter = express.Router();
@@ -12,6 +12,14 @@ loanRouter.get(
   Validator.validateInput,
   nidExist,
   LoanController.findNidaInfo
+);
+
+loanRouter.get(
+  "/rra/:tin",
+  Validator.tinRules(),
+  Validator.validateInput,
+  tinExist,
+  LoanController.findrraInfo
 );
 
 loanRouter.post(
