@@ -22,7 +22,7 @@ class LoanService {
         "status",
         "total_amount_to_pay",
         "updatedAt",
-        "createdAt"
+        "createdAt",
       ],
     };
 
@@ -35,7 +35,6 @@ class LoanService {
     months += new Date(loanInfo.updatedAt).getMonth();
 
     const timeEllapsed = months < 0 ? -months : months;
-
 
     const loanPeriod = Number(loanInfo.product.period.split("m")[0]);
 
@@ -106,31 +105,18 @@ class LoanService {
   }
 
   static async getAllLoanApplications(req) {
-    const { nid } = req.params;
+    const { status } = req.query;
+
+    const whereParams = status ? { status } : {};
     const appsaObj = {
-      where: {},
+      where: whereParams,
       // attributes: ["first_name", "last_name", "dob", "nid", "sex"],
     };
     const appsInfo = await QueryService.findAll(loans, appsaObj);
-    if(appsInfo.length){
-    const formattedInfo = await Promise.all(
-      appsInfo.map(
-        async ({
-          id,
-          first_name,
-          last_name,
-          email,
-          status,
-          phone,
-          amount_borrowed,
-          total_amount_to_pay,
-          isPaid,
-          amount_paid,
-          tin,
-          nid,
-          createdAt,
-        }) => {
-          const data = {
+    if (appsInfo.length) {
+      const formattedInfo = await Promise.all(
+        appsInfo.map(
+          async ({
             id,
             first_name,
             last_name,
@@ -141,18 +127,33 @@ class LoanService {
             total_amount_to_pay,
             isPaid,
             amount_paid,
-            createdAt
-          };
+            tin,
+            nid,
+            createdAt,
+          }) => {
+            const data = {
+              id,
+              first_name,
+              last_name,
+              email,
+              status,
+              phone,
+              amount_borrowed,
+              total_amount_to_pay,
+              isPaid,
+              amount_paid,
+              createdAt,
+            };
 
-          const rraData = await rra.findOne({ where: { tin } });
-          const crbData = await crb.findOne({ where: { nid } });
+            const rraData = await rra.findOne({ where: { tin } });
+            const crbData = await crb.findOne({ where: { nid } });
 
-          data.hasRRAflag = rraData.isTaxCleared;
-          data.hasCRBflag = crbData?.credit > 0;
+            data.hasRRAflag = rraData.isTaxCleared;
+            data.hasCRBflag = crbData?.credit > 0;
 
-          return data;
-        }
-      )
+            return data;
+          }
+        )
       );
       return formattedInfo;
     }
